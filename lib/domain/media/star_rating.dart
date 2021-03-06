@@ -1,10 +1,10 @@
 import 'package:xml/xml.dart';
 
 class StarRating {
-  final double average;
-  final int count;
-  final int min;
-  final int max;
+  final double? average;
+  final int? count;
+  final int? min;
+  final int? max;
 
   StarRating({
     this.average,

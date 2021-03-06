@@ -5,9 +5,9 @@ import 'package:dart_rss/util/helpers.dart';
 import 'package:xml/xml.dart';
 
 class Community {
-  final StarRating starRating;
-  final Statistics statistics;
-  final Tags tags;
+  final StarRating? starRating;
+  final Statistics? statistics;
+  final Tags? tags;
 
   Community({
     this.starRating,
@@ -16,19 +16,15 @@ class Community {
   });
 
   factory Community.parse(XmlElement element) {
-    if (element == null) {
-      return null;
-    }
+    final tagsElement = findElementOrNull(element, "media:tags");
     return new Community(
       starRating: new StarRating.parse(
-        findElementOrNull(element, "media:starRating"),
+        findElementOrNull(element, "media:starRating")!,
       ),
       statistics: new Statistics.parse(
-        findElementOrNull(element, "media:statistics"),
+        findElementOrNull(element, "media:statistics")!,
       ),
-      tags: new Tags.parse(
-        findElementOrNull(element, "media:tags"),
-      ),
+      tags: tagsElement != null ? new Tags.parse(tagsElement) : null,
     );
   }
 }

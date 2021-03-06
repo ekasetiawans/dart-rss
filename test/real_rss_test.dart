@@ -15,12 +15,12 @@ void main() {
       final url = testFeeds[title];
       test(title, () async {
         // given
-        final feed = await WebFeed.fromUrl(url);
+        final feed = await WebFeed.fromUrl(url!);
 
         // then
-        expect(feed.title.isNotEmpty, true);
+        expect(feed.title!.isNotEmpty, true);
         expect(feed.items.first.updated is DateTime, true);
-        expect(feed.items.first.links.isNotEmpty, true);
+        expect(feed.items.first.links!.isNotEmpty, true);
       });
     }
   });

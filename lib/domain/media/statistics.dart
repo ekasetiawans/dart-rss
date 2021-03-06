@@ -1,8 +1,8 @@
 import 'package:xml/xml.dart';
 
 class Statistics {
-  final int views;
-  final int favorites;
+  final int? views;
+  final int? favorites;
 
   Statistics({
     this.views,

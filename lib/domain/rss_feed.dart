@@ -11,28 +11,28 @@ import 'package:xml/xml.dart';
 import 'rss_itunes.dart';
 
 class RssFeed {
-  final String title;
-  final String author;
-  final String description;
-  final String link;
-  final List<RssItem> items;
+  final String? title;
+  final String? author;
+  final String? description;
+  final String? link;
+  final List<RssItem>? items;
 
-  final RssImage image;
-  final RssCloud cloud;
-  final List<RssCategory> categories;
-  final List<String> skipDays;
-  final List<int> skipHours;
-  final String lastBuildDate;
-  final String language;
-  final String generator;
-  final String copyright;
-  final String docs;
-  final String managingEditor;
-  final String rating;
-  final String webMaster;
-  final int ttl;
-  final DublinCore dc;
-  final RssItunes itunes;
+  final RssImage? image;
+  final RssCloud? cloud;
+  final List<RssCategory>? categories;
+  final List<String>? skipDays;
+  final List<int?>? skipHours;
+  final String? lastBuildDate;
+  final String? language;
+  final String? generator;
+  final String? copyright;
+  final String? docs;
+  final String? managingEditor;
+  final String? rating;
+  final String? webMaster;
+  final int? ttl;
+  final DublinCore? dc;
+  final RssItunes? itunes;
 
   RssFeed({
     this.title,
@@ -67,6 +67,9 @@ class RssFeed {
       throw ArgumentError("channel not found");
     }
 
+    final cloudElement = findElementOrNull(channelElement, "cloud");
+    final imageElement = findElementOrNull(channelElement, "image");
+
     return RssFeed(
       title: findElementOrNull(channelElement, "title")?.text,
       author: findElementOrNull(channelElement, "author")?.text,
@@ -75,22 +78,22 @@ class RssFeed {
       items: channelElement.findElements("item").map((element) {
         return RssItem.parse(element);
       }).toList(),
-      image: RssImage.parse(findElementOrNull(channelElement, "image")),
-      cloud: RssCloud.parse(findElementOrNull(channelElement, "cloud")),
+      image: imageElement != null ? RssImage.parse(imageElement) : null,
+      cloud: cloudElement != null ? RssCloud.parse(cloudElement) : null,
       categories: channelElement.findElements("category").map((element) {
         return RssCategory.parse(element);
       }).toList(),
       skipDays: findElementOrNull(channelElement, "skipDays")
               ?.findAllElements("day")
-              ?.map((element) {
+              .map((element) {
             return element.text;
-          })?.toList() ??
+          }).toList() ??
           [],
       skipHours: findElementOrNull(channelElement, "skipHours")
               ?.findAllElements("hour")
-              ?.map((element) {
-            return int.tryParse(element.text ?? "0");
-          })?.toList() ??
+              .map((element) {
+            return int.tryParse(element.text);
+          }).toList() ??
           [],
       lastBuildDate: findElementOrNull(channelElement, "lastBuildDate")?.text,
       language: findElementOrNull(channelElement, "language")?.text,

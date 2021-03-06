@@ -23,31 +23,31 @@ import 'package:dart_rss/util/helpers.dart';
 import 'package:xml/xml.dart';
 
 class Media {
-  final Group group;
-  final List<Content> contents;
-  final List<Credit> credits;
-  final Category category;
-  final Rating rating;
-  final Title title;
-  final Description description;
-  final String keywords;
-  final List<Thumbnail> thumbnails;
-  final Hash hash;
-  final Player player;
-  final Copyright copyright;
-  final Text text;
-  final Restriction restriction;
-  final Community community;
-  final List<String> comments;
-  final Embed embed;
-  final List<String> responses;
-  final List<String> backLinks;
-  final Status status;
-  final List<Price> prices;
-  final License license;
-  final PeerLink peerLink;
-  final Rights rights;
-  final List<Scene> scenes;
+  final Group? group;
+  final List<Content>? contents;
+  final List<Credit>? credits;
+  final Category? category;
+  final Rating? rating;
+  final Title? title;
+  final Description? description;
+  final String? keywords;
+  final List<Thumbnail>? thumbnails;
+  final Hash? hash;
+  final Player? player;
+  final Copyright? copyright;
+  final Text? text;
+  final Restriction? restriction;
+  final Community? community;
+  final List<String>? comments;
+  final Embed? embed;
+  final List<String>? responses;
+  final List<String>? backLinks;
+  final Status? status;
+  final List<Price>? prices;
+  final License? license;
+  final PeerLink? peerLink;
+  final Rights? rights;
+  final List<Scene>? scenes;
 
   Media({
     this.group,
@@ -78,91 +78,87 @@ class Media {
   });
 
   factory Media.parse(XmlElement element) {
+    final groupElement = findElementOrNull(element, "media:group");
+    final categoryElement = findElementOrNull(element, "media:category");
+    final ratingElement = findElementOrNull(element, "media:rating");
+    final titleElement = findElementOrNull(element, "media:title");
+    final descriptionElement = findElementOrNull(element, "media:description");
+    final hashElement = findElementOrNull(element, "media:hash");
+    final playerElement = findElementOrNull(element, "media:player");
+    final copyrightElement = findElementOrNull(element, "media:copyright");
+    final textElement = findElementOrNull(element, "media:text");
+    final restrictionElement = findElementOrNull(element, "media:restriction");
+    final communityElement = findElementOrNull(element, "media:community");
+    final embedElement = findElementOrNull(element, "media:embed");
+    final statusElement = findElementOrNull(element, "media:status");
+    final licenseElement = findElementOrNull(element, "media:license");
+    final peerLinkElement = findElementOrNull(element, "media:peerLink");
+    final rightsElement = findElementOrNull(element, "media:rights");
+
     return new Media(
-      group: new Group.parse(
-        findElementOrNull(element, "media:group"),
-      ),
+      group: groupElement != null ? new Group.parse(groupElement) : null,
       contents: element.findElements("media:content").map((e) {
         return new Content.parse(e);
       }).toList(),
       credits: element.findElements("media:credit").map((e) {
         return new Credit.parse(e);
       }).toList(),
-      category: new Category.parse(
-        findElementOrNull(element, "media:category"),
-      ),
-      rating: new Rating.parse(
-        findElementOrNull(element, "media:rating"),
-      ),
-      title: new Title.parse(
-        findElementOrNull(element, "media:title"),
-      ),
-      description: new Description.parse(
-        findElementOrNull(element, "media:description"),
-      ),
+      category:
+          categoryElement != null ? new Category.parse(categoryElement) : null,
+      rating: ratingElement != null ? new Rating.parse(ratingElement) : null,
+      title: titleElement != null ? new Title.parse(titleElement) : null,
+      description: descriptionElement != null
+          ? new Description.parse(descriptionElement)
+          : null,
       keywords: findElementOrNull(element, "media:keywords")?.text,
       thumbnails: element.findElements("media:thumbnail").map((e) {
         return new Thumbnail.parse(e);
       }).toList(),
-      hash: new Hash.parse(
-        findElementOrNull(element, "media:hash"),
-      ),
-      player: new Player.parse(
-        findElementOrNull(element, "media:player"),
-      ),
-      copyright: new Copyright.parse(
-        findElementOrNull(element, "media:copyright"),
-      ),
-      text: new Text.parse(
-        findElementOrNull(element, "media:text"),
-      ),
-      restriction: new Restriction.parse(
-        findElementOrNull(element, "media:restriction"),
-      ),
-      community: new Community.parse(
-        findElementOrNull(element, "media:community"),
-      ),
+      hash: hashElement != null ? new Hash.parse(hashElement) : null,
+      player: playerElement != null ? new Player.parse(playerElement) : null,
+      copyright: copyrightElement != null
+          ? new Copyright.parse(copyrightElement)
+          : null,
+      text: textElement != null ? new Text.parse(textElement) : null,
+      restriction: restrictionElement != null
+          ? new Restriction.parse(restrictionElement)
+          : null,
+      community: communityElement != null
+          ? new Community.parse(communityElement)
+          : null,
       comments: findElementOrNull(element, "media:comments")
               ?.findElements("media:comment")
-              ?.map((e) {
+              .map((e) {
             return e.text;
-          })?.toList() ??
+          }).toList() ??
           [],
-      embed: new Embed.parse(
-        findElementOrNull(element, "media:embed"),
-      ),
+      embed: embedElement != null ? new Embed.parse(embedElement) : null,
       responses: findElementOrNull(element, "media:responses")
               ?.findElements("media:response")
-              ?.map((e) {
+              .map((e) {
             return e.text;
-          })?.toList() ??
+          }).toList() ??
           [],
       backLinks: findElementOrNull(element, "media:backLinks")
               ?.findElements("media:backLink")
-              ?.map((e) {
+              .map((e) {
             return e.text;
-          })?.toList() ??
+          }).toList() ??
           [],
-      status: new Status.parse(
-        findElementOrNull(element, "media:status"),
-      ),
+      status: statusElement != null ? new Status.parse(statusElement) : null,
       prices: element.findElements("media:price").map((e) {
         return new Price.parse(e);
       }).toList(),
-      license: new License.parse(
-        findElementOrNull(element, "media:license"),
-      ),
-      peerLink: new PeerLink.parse(
-        findElementOrNull(element, "media:peerLink"),
-      ),
-      rights: new Rights.parse(
-        findElementOrNull(element, "media:rights"),
-      ),
+      license:
+          licenseElement != null ? new License.parse(licenseElement) : null,
+      peerLink:
+          peerLinkElement != null ? new PeerLink.parse(peerLinkElement) : null,
+      rights: rightsElement != null ? new Rights.parse(rightsElement) : null,
       scenes: findElementOrNull(element, "media:scenes")
               ?.findElements("media:scene")
-              ?.map((e) {
+              .map((e) {
             return new Scene.parse(e);
-          })?.toList() ??
+          }).toList() ??
           [],
     );
   }

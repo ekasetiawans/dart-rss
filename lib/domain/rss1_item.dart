@@ -5,11 +5,11 @@ import 'package:xml/xml.dart';
 import 'dublin_core/dublin_core.dart';
 
 class Rss1Item {
-  final String title;
-  final String description;
-  final String link;
-  final DublinCore dc;
-  final RssContent content;
+  final String? title;
+  final String? description;
+  final String? link;
+  final DublinCore? dc;
+  final RssContent? content;
 
   Rss1Item({
     this.title,
@@ -20,12 +20,13 @@ class Rss1Item {
   });
 
   factory Rss1Item.parse(XmlElement element) {
+    final contentElement = findElementOrNull(element, "content:encoded");
     return Rss1Item(
       title: findElementOrNull(element, "title")?.text,
       description: findElementOrNull(element, "description")?.text,
       link: findElementOrNull(element, "link")?.text,
       dc: DublinCore.parse(element),
-      content: RssContent.parse(findElementOrNull(element, "content:encoded")),
+      content: contentElement != null ? RssContent.parse(contentElement) : null,
     );
   }
 }

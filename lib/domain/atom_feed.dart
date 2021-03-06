@@ -7,20 +7,20 @@ import 'package:dart_rss/util/helpers.dart';
 import 'package:xml/xml.dart';
 
 class AtomFeed {
-  final String id;
-  final String title;
-  final String updated;
-  final List<AtomItem> items;
+  final String? id;
+  final String? title;
+  final String? updated;
+  final List<AtomItem>? items;
 
-  final List<AtomLink> links;
-  final List<AtomPerson> authors;
-  final List<AtomPerson> contributors;
-  final List<AtomCategory> categories;
-  final AtomGenerator generator;
-  final String icon;
-  final String logo;
-  final String rights;
-  final String subtitle;
+  final List<AtomLink>? links;
+  final List<AtomPerson>? authors;
+  final List<AtomPerson>? contributors;
+  final List<AtomCategory>? categories;
+  final AtomGenerator? generator;
+  final String? icon;
+  final String? logo;
+  final String? rights;
+  final String? subtitle;
 
   AtomFeed({
     this.id,
@@ -47,6 +47,7 @@ class AtomFeed {
       throw new ArgumentError("feed not found");
     }
 
+    final generatorElement = findElementOrNull(feedElement, "generator");
     return AtomFeed(
       id: findElementOrNull(feedElement, "id")?.text,
       title: findElementOrNull(feedElement, "title")?.text,
@@ -66,8 +67,9 @@ class AtomFeed {
       categories: feedElement.findElements("category").map((element) {
         return AtomCategory.parse(element);
       }).toList(),
-      generator:
-          AtomGenerator.parse(findElementOrNull(feedElement, "generator")),
+      generator: generatorElement != null
+          ? AtomGenerator.parse(generatorElement)
+          : null,
       icon: findElementOrNull(feedElement, "icon")?.text,
       logo: findElementOrNull(feedElement, "logo")?.text,
       rights: findElementOrNull(feedElement, "rights")?.text,

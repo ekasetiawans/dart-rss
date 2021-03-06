@@ -7,20 +7,20 @@ import 'package:dart_rss/util/helpers.dart';
 import 'package:xml/xml.dart';
 
 class AtomItem {
-  final String id;
-  final String title;
-  final String updated;
+  final String? id;
+  final String? title;
+  final String? updated;
 
-  final List<AtomPerson> authors;
-  final List<AtomLink> links;
-  final List<AtomCategory> categories;
-  final List<AtomPerson> contributors;
-  final AtomSource source;
-  final String published;
-  final String content;
-  final String summary;
-  final String rights;
-  final Media media;
+  final List<AtomPerson>? authors;
+  final List<AtomLink>? links;
+  final List<AtomCategory>? categories;
+  final List<AtomPerson>? contributors;
+  final AtomSource? source;
+  final String? published;
+  final String? content;
+  final String? summary;
+  final String? rights;
+  final Media? media;
 
   AtomItem({
     this.id,
@@ -39,6 +39,7 @@ class AtomItem {
   });
 
   factory AtomItem.parse(XmlElement element) {
+    final sourceElement = findElementOrNull(element, "source");
     return AtomItem(
       id: findElementOrNull(element, "id")?.text,
       title: findElementOrNull(element, "title")?.text,
@@ -55,7 +56,7 @@ class AtomItem {
       contributors: element.findElements("contributor").map((element) {
         return AtomPerson.parse(element);
       }).toList(),
-      source: AtomSource.parse(findElementOrNull(element, "source")),
+      source: sourceElement != null ? AtomSource.parse(sourceElement) : null,
       published: findElementOrNull(element, "published")?.text,
       content: findElementOrNull(element, "content")?.text,
       summary: findElementOrNull(element, "summary")?.text,
